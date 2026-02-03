@@ -1,3 +1,15 @@
+# ============================================================================
+# Script: oobe-configure.ps1
+# Função: Aplicar configurações do OOBE via sysprep
+# Dependências: sysprep.exe (ferramenta nativa do Windows)
+# Descrição:
+#   - Cria arquivo unattend.xml temporário com configurações do OOBE
+#   - Oculta telas do OOBE (exceto conexão WiFi)
+#   - Cria usuário admin local sem senha
+#   - Configura idioma e região para en-US
+#   - Executa sysprep para aplicar as configurações
+# ============================================================================
+
 @"
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
@@ -37,6 +49,10 @@
 "@ | Out-File "$($env:windir)\temp\unattend.xml" -Encoding utf8
 
 # Execute sysprep to apply new OOBE setup settings
+# Executa o sysprep para aplicar as configurações do unattend.xml
+# /oobe = reinicia no modo OOBE
+# /quit = sai após conclusão (não desliga)
+# /unattend = usa o arquivo XML especificado
 $execute_sysprep = @{
     FilePath     = "$($env:windir)\System32\Sysprep\sysprep.exe"
     ArgumentList = "/oobe", "/quit", "/unattend:$($env:windir)\temp\unattend.xml"
