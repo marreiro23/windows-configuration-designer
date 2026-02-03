@@ -2,7 +2,7 @@
 
 <b>Objetivos:</b>
 
-* Executar oobe-setup.p1
+* Executar oobe-setup.ps1
     * Criar usuário admin local
     * Pular "Experiência de Privacidade"
     * Executar oobe-bloatware.ps1
