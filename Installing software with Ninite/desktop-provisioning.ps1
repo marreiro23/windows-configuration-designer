@@ -1,8 +1,21 @@
+# ============================================================================
+# Script: desktop-provisioning.ps1
+# Função: Instalar software usando Ninite
+# Dependências:
+#   - ninite.exe (deve estar na pasta $ProvisioningFolder)
+#   - Conexão com internet (necessária para Ninite baixar instaladores)
+# Descrição:
+#   - Aguarda conexão de rede disponível
+#   - Executa o instalador Ninite que instala múltiplos aplicativos
+#   - Suporta tanto instaladores .msi quanto .exe
+# ============================================================================
+
 param(
     [System.IO.DirectoryInfo]$ProvisioningFolder
 )
 
 # wait for network
+# Aguarda até que a conexão de rede esteja disponível
 $ProgressPreference_bk = $ProgressPreference
 $ProgressPreference = 'SilentlyContinue'
 do {
@@ -15,12 +28,14 @@ do {
 } while (!$ping)
 $ProgressPreference = $ProgressPreference_bk
 
+# Define o pacote Ninite a ser executado
 $packages =
 [PSCustomObject]@{
     Name = "Ninite"
     Exe  = "ninite.exe"
 }
 
+# Executa a instalação de cada pacote
 foreach ($package in $packages) {
     Write-Host "Executing $($package.Name) installation."
     if ($package.exe -Like "*.msi") {
